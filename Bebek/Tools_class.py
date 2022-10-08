@@ -1,4 +1,5 @@
 #from logging import root
+from hashlib import new
 import random
 from threading import Thread
 import tkinter
@@ -25,14 +26,9 @@ class bebek_tools():
         seleted_Cell =""
         btn_name =""
         saveWord = "dupa"
-        M_check = ""
-        global_var ="" 
-        
-        
-            
-        
-        
-        
+        picked_position = ""
+        global_var =""
+
         def btn_wait4press(button_obj_arr,btn_check_str):
             if any(button_obj_arr):
                 pass
@@ -179,49 +175,62 @@ class bebek_tools():
             for move_x in range(move_range):
                 ty = move_x+1
                 tx = int(sX)+ty
-                temp_path = str(sY)+":"+str(tx)
-                path_btn = btn_dict_board[temp_path]
-                if path_btn.cell_taken == False:
-                    path_btn['bg'] = 'green'
-                    possible_move_dict[temp_path]=path_btn.cell_taken
-                else:
-                    path_btn['bg'] = 'red'
-                    possible_move_dict[temp_path]=path_btn.cell_taken
+                if tx == 0 or tx == 13:
                     break
+                else:
+                    temp_path = str(sY)+":"+str(tx)
+                    path_btn = btn_dict_board[temp_path]
+                    if path_btn.cell_taken == False:
+                        path_btn['bg'] = 'green'
+                        possible_move_dict[temp_path]=path_btn.cell_taken
+                    else:
+                        path_btn['bg'] = 'red'
+                        possible_move_dict[temp_path]=path_btn.cell_taken
+                        break
             for move_y in range(move_range):
                 ty=int(sY)+move_y+1
-                temp_path = str(ty)+":"+str(sX)
-                path_btn = btn_dict_board[temp_path]
-                if path_btn.cell_taken == False:
-                    path_btn['bg'] = 'green'
-                    possible_move_dict[temp_path]=path_btn.cell_taken
-                else:
-                    path_btn['bg'] = 'red'
-                    possible_move_dict[temp_path]=path_btn.cell_taken
+                if ty == 0 or ty == 19:
                     break
+                else:
+                    temp_path = str(ty)+":"+str(sX)
+                    path_btn = btn_dict_board[temp_path]
+                    if path_btn.cell_taken == False:
+                        path_btn['bg'] = 'green'
+                        possible_move_dict[temp_path]=path_btn.cell_taken
+                    else:
+                        path_btn['bg'] = 'red'
+                        possible_move_dict[temp_path]=path_btn.cell_taken
+                        break
             for move_x in range(move_range):
                 tx=int(sX)-move_x-1
-                temp_path = str(sY)+":"+str(tx)
-                path_btn = btn_dict_board[temp_path]
-                if path_btn.cell_taken == False:
-                    path_btn['bg'] = 'green'
-                    possible_move_dict[temp_path]=path_btn.cell_taken
-                else:
-                    path_btn['bg'] = 'red'
-                    possible_move_dict[temp_path]=path_btn.cell_taken
+                if tx == 0 or tx == 13:
                     break
+                else:
+                    temp_path = str(sY)+":"+str(tx)
+                    path_btn = btn_dict_board[temp_path]
+                    if path_btn.cell_taken == False:
+                        path_btn['bg'] = 'green'
+                        possible_move_dict[temp_path]=path_btn.cell_taken
+                    else:
+                        path_btn['bg'] = 'red'
+                        possible_move_dict[temp_path]=path_btn.cell_taken
+                        break
             for move_y in range(move_range):
                 ty=int(sY)-move_y-1
-                temp_path = str(ty)+":"+str(sX)
-                path_btn = btn_dict_board[temp_path]
-                if path_btn.cell_taken == False:
-                    path_btn['bg'] = 'green'
-                    possible_move_dict[temp_path]=path_btn.cell_taken
-                else:
-                    path_btn['bg'] = 'red'
-                    possible_move_dict[temp_path]=path_btn.cell_taken
+                if ty == 0 or ty ==19:
                     break
+                else:
+                    temp_path = str(ty)+":"+str(sX)
+                    path_btn = btn_dict_board[temp_path]
+                    if path_btn.cell_taken == False:
+                        path_btn['bg'] = 'green'
+                        possible_move_dict[temp_path]=path_btn.cell_taken
+                    else:
+                        path_btn['bg'] = 'red'
+                        possible_move_dict[temp_path]=path_btn.cell_taken
+                        break
                 #output is an action input - you see possible moves and info if there is smth on it already
+            bebek_tools.RewriteCell_Position()
             return possible_move_dict
         def Clean_Move_Options(move_options_dict, btn_dict_board):
             for cord_cell in move_options_dict:
@@ -237,55 +246,80 @@ class bebek_tools():
                         btn_cell['bg'] = 'white'
                     except:
                         pass
-        
-        def thread_var_monitor(old_value):
+        def RewriteCell_Position():
             global btn_name
-            p1 = str(old_value)
-            p2 = str(btn_name)
-            while p1 == p2:
-                try:
-                    
-                    d = p2
-                except:
-                    d = p2
-                if p1 != d:
-                    break
-                else:
-                    print("awaiting")
-                    
-                
-            print("input recived")
-        
+            global picked_position
+            picked_position = btn_name
+            btn_name = ""
+        def Clone_char_btn2btn(orgin_position_btn,new_position_btn):
+            #read character data
+            btn_pos_taken = orgin_position_btn.cell_taken
+            btn_char_type = orgin_position_btn.char_type 
+            btn_char_health = orgin_position_btn.char_health
+            btn_char_move = orgin_position_btn.char_move
+            btn_char_armor = orgin_position_btn.char_armor
+            btn_char_throw = orgin_position_btn.char_throw
+            btn_char_team = orgin_position_btn.char_team
+            btn_char_ball = orgin_position_btn.char_ball
+            btn_color = orgin_position_btn['bg']
+            btn_text = orgin_position_btn['text']
+            #Null char values from old position
+            orgin_position_btn.cell_taken = False
+            orgin_position_btn.char_type = ""
+            orgin_position_btn.char_health = ""
+            orgin_position_btn.char_move = ""
+            orgin_position_btn.char_armor = ""
+            orgin_position_btn.char_throw = ""
+            orgin_position_btn.char_team = ""
+            orgin_position_btn.char_ball = ""
+            orgin_position_btn['bg'] = 'white'
+            orgin_position_btn['text'] =""
+            
+            # Update destination btn with char data
+            new_position_btn.cell_taken = btn_pos_taken
+            new_position_btn.char_type = btn_char_type
+            new_position_btn.char_health = btn_char_health
+            new_position_btn.char_move = btn_char_move
+            new_position_btn.char_armor = btn_char_armor
+            new_position_btn.char_throw = btn_char_throw
+            new_position_btn.char_team = btn_char_team
+            new_position_btn.char_ball= btn_char_ball
+            new_position_btn['bg'] = btn_color
+            new_position_btn['text'] = btn_text
+            print(btn_char_type+" has moved from: "+str(orgin_position_btn.btn_position[0])+" to: "+str(new_position_btn.btn_position[0]))
         def Make_Move(move_options_dict, btn_dict_board):
             global btn_name
-            old_pos = btn_name
+            global picked_position
+            try:
+                new_pos = str(btn_name[0])
+            except:
+                messagebox.showwarning(title='Enter destination', message='You have pick where you want to go before you click make a move')
+            try:
+                old_pos = str(picked_position[0])
+            except:
+                messagebox.showwarning(title='You didnt pick a character', message='You have pick which player you want to move before you click on make a move')
             var = tkinter.IntVar()
             check_var = var
             BtnArr = []
-            move_to_cord = btn_name
+            move_to_cord = new_pos
             for btn_cord in move_options_dict:
                 if move_options_dict[btn_cord] == False:
                     btn = btn_dict_board[btn_cord]
                     BtnArr.append(btn)
-            print("added")
-            thread_cpu =Thread(target=bebek_tools.thread_var_monitor(old_pos))
-            thread_cpu.start()
-            thread_cpu.join()
             
             #bebek_tools.btn_wait4press(BtnArr,var)
             if move_to_cord in move_options_dict:
-                move_to_btn = btn_dict_board[move_to_cord]
-                
-                
+                move_to_cord_btn = btn_dict_board[move_to_cord]
+                move_from_cord_btn = btn_dict_board[old_pos]
                 #remove new position from cleaning
                 move_options_dict.pop(move_to_cord)
+                bebek_tools.Clone_char_btn2btn(move_from_cord_btn,move_to_cord_btn)
+                
                 #add old position
                 #move_options_dict[bebek_obj.dictKey]=True
                 bebek_tools.Clean_Move_Options(move_options_dict,btn_dict_board)
             else:
                 messagebox.showwarning(title='Illegal move', message='Please pick only highlithed filed')
-            
-            pass
         
                 
         
