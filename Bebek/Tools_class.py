@@ -28,6 +28,7 @@ class bebek_tools():
         saveWord = "dupa"
         picked_position = ""
         global_var =""
+        
 
         def btn_wait4press(button_obj_arr,btn_check_str):
             if any(button_obj_arr):
@@ -99,20 +100,20 @@ class bebek_tools():
                             case 12:
                                 roll_result.append('Blizzard')               
             return roll_result    
-        def create_cell(X,Y,tk_obj,bebek_obj,pitch_definition,dict_pos):
+        def create_cell(X,Y,tk_obj,bebek_obj,pitch_definition,dict_pos,cell_def):
             #dict_pos=dict()
             global btn_name
             global global_var
             var = tkinter.IntVar() 
             varBtnName = "Button_Cell"+str(X)+":"+str(Y)
             if X == 1 or  X == pitch_definition['size_l']-1 :
-                varBtnName = Button(tk_obj, text="", command=lambda:[bebek_tools.SavePosition(varBtnName),print(btn_name), var.set(1)], width=4, height=2,bg="yellow")
+                varBtnName = Button(tk_obj, text="", command=lambda:[bebek_tools.SavePosition(varBtnName),print(btn_name), var.set(1)], width=cell_def['width'], height=cell_def['lenght'],bg="yellow",image=cell_def['image'],compound='center')
                 varBtnName.grid(row=X, column=Y)
                 varBtnName.cell_taken = False
                 varBtnName.btn_position=[str(X)+":"+str(Y)]
                 dict_pos[str(X)+":"+str(Y)] =varBtnName
             else:
-                varBtnName = Button(tk_obj, text="", command=lambda:[bebek_tools.SavePosition(varBtnName),print(btn_name), var.set(1)],bg="white",width=4, height=2)
+                varBtnName = Button(tk_obj, text="", command=lambda:[bebek_tools.SavePosition(varBtnName),print(btn_name), var.set(1)],bg="white",width=cell_def['width'], height=cell_def['lenght'], image=cell_def['image'],compound='center')
                 varBtnName.grid(row=X, column=Y)
                 varBtnName.cell_taken = False
                 varBtnName.btn_position=[str(X)+":"+str(Y)]
@@ -133,7 +134,7 @@ class bebek_tools():
             #btn_name = btn_string
             print(r)
             return r           
-        def set_char(X,Y,tk_obj,bebek_obj,pitch_definition, btn_dict_board):
+        def set_char(X,Y,tk_obj,bebek_obj,pitch_definition, btn_dict_board, char_dict_pic):
             #Find Button to update
             var = tkinter.IntVar()
             dictKey = str(X)+":"+str(Y)
@@ -152,8 +153,10 @@ class bebek_tools():
             btn.char_team = bebek_obj['team']
             btn.char_ball = False
             btn.cell_taken = True
-            #btn.selected_char =btn.configure(text =bebek_obj['type'], command =lambda:[bebek_tools.get_position_btn(dictKey)])
-            btn.selected_char =btn.configure(text =bebek_obj['type'])
+            image_char = bebek_obj['pic']
+            btn.img = image_char
+            char_dict_pic[btn] = btn.img
+            btn.selected_char =btn.configure(text =bebek_obj['type'], image=btn.img,compound='center')
             return btn       
         def show_move_options(tk_obj, btn_dict_board,possible_move_dict):
             #start move setup
@@ -251,8 +254,11 @@ class bebek_tools():
             global picked_position
             picked_position = btn_name
             btn_name = ""
-        def Clone_char_btn2btn(orgin_position_btn,new_position_btn):
+        def Clone_char_btn2btn(orgin_position_btn,new_position_btn,btn_pic_dict):
+            #null img for remove
+            null_image = tkinter.PhotoImage(width=0, height=0)
             #read character data
+            btn_pic = btn_pic_dict[orgin_position_btn]
             btn_pos_taken = orgin_position_btn.cell_taken
             btn_char_type = orgin_position_btn.char_type 
             btn_char_health = orgin_position_btn.char_health
@@ -263,7 +269,9 @@ class bebek_tools():
             btn_char_ball = orgin_position_btn.char_ball
             btn_color = orgin_position_btn['bg']
             btn_text = orgin_position_btn['text']
+           
             #Null char values from old position
+            btn_pic_dict.pop(orgin_position_btn)
             orgin_position_btn.cell_taken = False
             orgin_position_btn.char_type = ""
             orgin_position_btn.char_health = ""
@@ -274,6 +282,8 @@ class bebek_tools():
             orgin_position_btn.char_ball = ""
             orgin_position_btn['bg'] = 'white'
             orgin_position_btn['text'] =""
+            orgin_position_btn['image'] = null_image
+            btn_pic_dict[orgin_position_btn]=null_image
             
             # Update destination btn with char data
             new_position_btn.cell_taken = btn_pos_taken
@@ -286,14 +296,16 @@ class bebek_tools():
             new_position_btn.char_ball= btn_char_ball
             new_position_btn['bg'] = btn_color
             new_position_btn['text'] = btn_text
+            new_position_btn['image'] = btn_pic
+            btn_pic_dict[new_position_btn]=btn_pic
             print(btn_char_type+" has moved from: "+str(orgin_position_btn.btn_position[0])+" to: "+str(new_position_btn.btn_position[0]))
-        def Make_Move(move_options_dict, btn_dict_board):
+        def Make_Move(move_options_dict, btn_dict_board,btn_pic_dict):
             global btn_name
             global picked_position
             try:
                 new_pos = str(btn_name[0])
             except:
-                messagebox.showwarning(title='Enter destination', message='You have pick where you want to go before you click make a move')
+                messagebox.showwarning(title='Enter destination', message='You have to pick where you want to go before you click make a move')
             try:
                 old_pos = str(picked_position[0])
             except:
@@ -313,11 +325,12 @@ class bebek_tools():
                 move_from_cord_btn = btn_dict_board[old_pos]
                 #remove new position from cleaning
                 move_options_dict.pop(move_to_cord)
-                bebek_tools.Clone_char_btn2btn(move_from_cord_btn,move_to_cord_btn)
+                bebek_tools.Clone_char_btn2btn(move_from_cord_btn,move_to_cord_btn,btn_pic_dict)
                 
                 #add old position
                 #move_options_dict[bebek_obj.dictKey]=True
                 bebek_tools.Clean_Move_Options(move_options_dict,btn_dict_board)
+                print("cleand")
             else:
                 messagebox.showwarning(title='Illegal move', message='Please pick only highlithed filed')
         

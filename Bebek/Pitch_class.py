@@ -3,6 +3,7 @@ from string import ascii_lowercase as alc
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import tkinter
 
 class bebek_pitch(object):
         
@@ -25,8 +26,10 @@ class bebek_pitch(object):
                 def cell_definition():
                         cell_def=dict()
                         type_prop=dict()
-                        cell_def['width']=4
-                        cell_def['lenght']=2
+                        null_image = tkinter.PhotoImage(width=0, height=0)
+                        cell_def['image'] = null_image
+                        cell_def['width'] ="40"
+                        cell_def['lenght'] ="40"
                         cell_def['type']='cell'
                         cell_def['properties']=type_prop
                         

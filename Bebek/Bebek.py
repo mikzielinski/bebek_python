@@ -13,7 +13,7 @@ import tk_interface
 MainWindow = tkinter.Tk()
 
 list_obj=[]
-cell_def = Pitch_class.bebek_pitch.cell.cell_definition()
-pc = Pitch_class.bebek_pitch.create_pitch("252, 247, 247")
-tk_interface.draw_pitch(pc,cell_def,MainWindow)
+#cell_def = Pitch_class.bebek_pitch.cell.cell_definition()
+#pc = Pitch_class.bebek_pitch.create_pitch("252, 247, 247")
+#tk_interface.draw_pitch(pc,cell_def,MainWindow)
 
