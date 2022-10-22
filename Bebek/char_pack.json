@@ -1,0 +1,291 @@
+{
+  "squadName": "Super hero squad",
+  "NPCs": [
+    {
+      "name": "Body part",
+      "owner": "",
+      "part": "",
+      "tissue_freshness": 5
+    },
+    {
+      "name": "Ball"
+    },
+    {
+      "name": "cheerleaders"
+    }
+  ],
+  "Players_char":[
+    {
+      "Team":"Dwarfs",
+      "Players":[]
+    },
+    {
+      "Team":"Chaos",
+      "Players": [
+      {
+        "class": "Char_template",
+        "cost": "",
+        "body": [
+          {
+            "name": "head",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "right_hand",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "left_hand",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "right_leg",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "left_leg",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          }
+        ],
+        "type": "",
+        "health": "",
+        "move": "",
+        "armor": "",
+        "throw": "",
+        "text": "",
+        "skills": [
+          {
+            "skillName": ""
+          }
+        ],
+        "mutations": [
+          {
+            "mutationName": ""
+          }
+        ],
+        "dexterity": 2,
+        "pitch_pic": "",
+        "portret_pic": ""
+      },
+      {
+        "class": "Orc runner",
+        "cost": 10000,
+        "body": [
+          {
+            "name": "head",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "right_hand",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "left_hand",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "right_leg",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "left_leg",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          }
+        ],
+        "type": "orc",
+        "health": 3,
+        "move": 3,
+        "armor": 2,
+        "throw": 2,
+        "text": "o_rn",
+        "dexterity": 2,
+        "skills": [
+          {
+            "name": "Thrower",
+            "Active": true,
+            "lvl": 1
+          },
+          {
+            "name": "Condition",
+            "Active": true,
+            "lvl": 2
+          },
+          {
+            "name": "Short",
+            "Active": true,
+            "lvl": 1
+          }
+        ],
+        "mutations": [
+          {
+            "mutationName": "Elastopathy",
+            "Active": true
+          }
+        ],
+        "pitch_pic": "",
+        "portret_pic": ""
+      },
+      {
+        "class": "Orc halfling",
+        "cost": 8000,
+        "body": [
+          {
+            "name": "head",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "right_hand",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "left_hand",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "right_leg",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "left_leg",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          }
+        ],
+        "type": "orc",
+        "health": 2,
+        "move": 4,
+        "armor": 1,
+        "throw": 1,
+        "text": "o_hf",
+        "dexterity": 3,
+        "skills": [
+          {
+            "name": "Pickpocketing",
+            "Active": true,
+            "lvl": 1
+          },
+          {
+            "name": "Condition",
+            "Active": true,
+            "lvl": 1
+          }
+        ],
+        "mutations": [
+          {
+            "mutationName": "Short fingers",
+            "Active": true
+          }
+        ],
+        "pitch_pic": "",
+        "portret_pic": ""
+      },
+      {
+        "class": "Orc Zombie thrower",
+        "cost": "15000",
+        "body": [
+          {
+            "name": "head",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "right_hand",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "left_hand",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "right_leg",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          },
+          {
+            "name": "left_leg",
+            "number": 1,
+            "broken": false,
+            "twisted": false,
+            "cutoff": false
+          }
+        ],
+        "type": "orc zombie",
+        "health": "2",
+        "move": "2",
+        "armor": "2",
+        "throw": "4",
+        "text": "o_zb",
+        "skills": [
+          {
+            "Decompose": "Decompose",
+            "Active": true,
+            "lvl": 1
+          }
+        ],
+        "mutations": [
+          {
+            "mutationName": ""
+          }
+        ],
+        "dexterity": 1,
+        "pitch_pic": "",
+        "portret_pic": ""
+      }
+    ]
+    }
+  ]
+}

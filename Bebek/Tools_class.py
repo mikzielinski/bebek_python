@@ -330,7 +330,6 @@ class bebek_tools():
                 #add old position
                 #move_options_dict[bebek_obj.dictKey]=True
                 bebek_tools.Clean_Move_Options(move_options_dict,btn_dict_board)
-                print("cleand")
             else:
                 messagebox.showwarning(title='Illegal move', message='Please pick only highlithed filed')
         
