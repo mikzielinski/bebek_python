@@ -1,0 +1,10 @@
+{
+    "TeamName": "TeamName",
+    "TeamValue": 0,
+    "TeamBudget": 10000,
+    "Team":"Chaos",
+    "Won": 0,
+    "Lost": 0,
+    "Tie": 0,
+    "Players": []
+  }

@@ -4,6 +4,7 @@ import sys
 import tkinter
 from turtle import position
 import Team_class
+from Team_class import TeamSquad
 from Team_class import bebek_team_picker_menu
 from Pitch_class import bebek_pitch
 from Tools_class import bebek_tools
@@ -46,6 +47,8 @@ btn_show_move = Button(MainWindow, text="Show Move Options", command= lambda:beb
 btn_move = Button(MainWindow, text="Make a move", command= lambda:[GetPics_dic_btn(),bebek_tools.Make_Move(possible_move,poitions_dict,pics_btn_dict)]).grid(column="2",row="5")
 btn_clean_move = Button(MainWindow, text="Clean Move", command= lambda:bebek_tools.Clean_Move_Options(possible_move,poitions_dict)).grid(column="2",row="6")
 btn_team_picker = Button(MainWindow, text="Team Picker", command= lambda:bebek_team_picker_menu.char_picker(MainWindow)).grid(column="3",row="3")
+
+btn_team_picker = Button(MainWindow, text="Register Team", command= lambda:TeamSquad.BuildTeam_Window(MainWindow)).grid(column="3",row="4")
 #null_image = tkinter.PhotoImage(width=0, height=0)
 #test_btn = Button(MainWindow,width="50",height="50", image=null_image).grid(column=3, row=3)
 
