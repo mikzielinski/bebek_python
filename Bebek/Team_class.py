@@ -23,6 +23,7 @@ player_chart = ""
 teams_list = []
 teams_dict = dict()
 selected_team=""
+team_budget=""
 
 class Playable_char(object):
     #Class for player definition
@@ -163,6 +164,11 @@ class bebek_team_picker_menu():
                 picked_char = pl_cl
                 break
         bebek_team_picker_menu.Update_players(txt_box_class,txt_box_cost,txt_box_type,txt_box_health,txt_box_move,txt_box_armor,txt_box_throw,txt_box_text,txt_box_dext)
+    def Update_team(Team_budget_filed):
+        print(team_budget)
+        #Team_budget_filed.configure(state=tk.NORMAL)
+        #Team_budget_filed.delete(0,"end")
+        #Team_budget_filed.pack()
 
     def Update_players(txt_box_class,txt_box_cost,txt_box_type,txt_box_health,txt_box_move,txt_box_armor,txt_box_throw,txt_box_text,txt_box_dext):
         txt_box_class.configure(state=tk.NORMAL)
@@ -283,15 +289,25 @@ class bebek_team_picker_menu():
         bebek_team_picker_menu.Check_for_existing_teams()
         
         
-        #GUI
+        #GUI frames
         Window = tk.Toplevel(Mian_window)
         Window.title("Char picker")
         
-        Window.maxsize(width=500, height=500)
+        Window.maxsize(width=500, height=700)
         w_char_pic = tk.Canvas(Window, width=300, height=500)
         
         top_frame = tk.Frame(Window, width = 100, height = 500, bg='gray')
         top_frame.pack(side='top',  fill='both',  padx=10,  pady=5,  expand=True)
+        
+        
+        mid_top_frame = tk.Frame(Window, width = 100, height = 500, bg='gray')
+        mid_top_frame.pack(side='top',  fill='both',  padx=10,  pady=5,  expand=True)
+        
+        top_mid_left_frame = tk.Frame(mid_top_frame, width = 100, height = 20, bg='gray')
+        top_mid_left_frame.pack(side='left',  fill='both',  padx=10,  pady=5,  expand=False)
+        
+        top_mid_right_frame= tk.Frame(mid_top_frame, width = 100, height = 20, bg='gray')
+        top_mid_right_frame.pack(side='right',  fill='both',  padx=10,  pady=5,  expand=False)
         
         mid_frame = tk.Frame(Window, width = 100, height = 500, bg='gray')
         mid_frame.pack(side='bottom',  fill='both',  padx=10,  pady=5,  expand=True)
@@ -302,11 +318,6 @@ class bebek_team_picker_menu():
         right_frame  =  tk.Frame(mid_frame,  width=650,  height=400,  bg='grey')
         right_frame.pack(side='right',  fill='both',  padx=10,  pady=5,  expand=True)
         
-        #bottom_frame= tk.Frame(Window, width = 100, height = 500, bg='gray')
-        #bottom_frame.pack(side='bottom',  fill='both',  padx=10,  pady=5,  expand=True)
-        
-        fig_canv = ""
-        
         
         
         #Pick player team
@@ -314,12 +325,24 @@ class bebek_team_picker_menu():
         combo_pick_player_team = ttk.Combobox(top_frame)
         combo_pick_player_team['values']=teams_list
         combo_pick_player_team['state'] ='readonly'
-        combo_pick_player_team.bind("<<ComboboxSelected>>", lambda x: TeamSquad.read_team(combo_pick_player_team))
+        combo_pick_player_team.bind("<<ComboboxSelected>>",lambda x=1: [TeamSquad.read_team(combo_pick_player_team),bebek_team_picker_menu.Update_team(txt_box_teamBudget)])
         combo_pick_player_team.pack(fill=tk.X,padx=5,pady=5, side="top")
         ### Your Founds
+        #team fileds
+        ##team budget
+        label_team_budget = tk.Label(top_mid_left_frame, text="Team budget:", bg="gray").pack(fill=tk.X,padx=5,pady=5, side="left")
+        txt_box_teamBudget = tk.Entry(top_mid_left_frame,bg="gray").pack(fill=tk.X,padx=5,pady=5, side="left")
+        try:
+            tm_budget = team_budget
+        except:
+            tm_budget = ""
+        #txt_box_teamBudget.insert(0,tm_budget)
+        #txt_box_teamBudget.configure(state=tk.DISABLED)
+        #txt_box_teamBudget.pack()
         
         
-        #label_part1
+        
+        
         
         #Combobox - pick team players
         Label_Player_Clan = tk.Label(frame_left, text="Pick player fraction", bg="gray").pack(fill=tk.X,padx=5,pady=5)
@@ -329,13 +352,16 @@ class bebek_team_picker_menu():
         combo_pick_team.bind("<<ComboboxSelected>>", lambda x: bebek_team_picker_menu.GetPlayers(combo_pick_team,players_listbox))
         combo_pick_team.pack(fill=tk.X,padx=5,pady=5)
         
-
+        
         
         ###Listbox
-        Label_Player_to_buy = tk.Label(frame_left, text="players to can hire:", bg="gray").pack(fill=tk.X,padx=5,pady=5)
+        Label_Player_to_buy = tk.Label(frame_left, text="players you can hire:", bg="gray").pack(fill=tk.X,padx=5,pady=5)
         players_listbox = tk.Listbox(frame_left, selectmode=BROWSE)
         players_listbox.bind('<<ListboxSelect>>',lambda x:bebek_team_picker_menu.GetPlayerDetails(players_listbox,txt_box_class,txt_box_cost,txt_box_type,txt_box_health,txt_box_move,txt_box_armor,txt_box_throw,txt_box_text,txt_box_dext))
         players_listbox.pack(fill=tk.BOTH,expand=True)
+        
+        
+        
         #player_chart
 
         label_char_class = tk.Label(right_frame, text="Class", bg="gray", anchor='w').pack()
@@ -481,13 +507,18 @@ class TeamSquad(object):
     def read_team(Combobox_teamPick):
         global teams_dict
         global selected_team
+        global team_budget
+        team_budget = 0
         picked_team_name = Combobox_teamPick.get()
         json_team_file = teams_dict[picked_team_name]
         with open("Bebek/Teams_/"+json_team_file,"r") as file:
             str_json = file.read().rstrip()
         json_chars = json.loads(str_json)
-        #team_data_json = json_chars['Players']
+        if team_budget > 0:
+            team_budget = json_chars['TeamBudget']
+
         return json_chars
+
 
     def playable_char_to_json(playable_char_obj):
         player_def_json = dict()
