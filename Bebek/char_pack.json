@@ -17,7 +17,68 @@
   "Players_char":[
     {
       "Team":"Dwarfs",
-      "Players":[]
+      "Players":[
+        {
+          "class": "Char_template",
+          "cost": "",
+          "body": [
+            {
+              "name": "head",
+              "number": 1,
+              "broken": false,
+              "twisted": false,
+              "cutoff": false
+            },
+            {
+              "name": "right_hand",
+              "number": 1,
+              "broken": false,
+              "twisted": false,
+              "cutoff": false
+            },
+            {
+              "name": "left_hand",
+              "number": 1,
+              "broken": false,
+              "twisted": false,
+              "cutoff": false
+            },
+            {
+              "name": "right_leg",
+              "number": 1,
+              "broken": false,
+              "twisted": false,
+              "cutoff": false
+            },
+            {
+              "name": "left_leg",
+              "number": 1,
+              "broken": false,
+              "twisted": false,
+              "cutoff": false
+            }
+          ],
+          "type": "",
+          "health": "",
+          "move": "",
+          "armor": "",
+          "throw": "",
+          "text": "",
+          "skills": [
+            {
+              "skillName": ""
+            }
+          ],
+          "mutations": [
+            {
+              "mutationName": ""
+            }
+          ],
+          "dexterity": 2,
+          "pitch_pic": "",
+          "portret_pic": ""
+        }
+      ]
     },
     {
       "Team":"Chaos",

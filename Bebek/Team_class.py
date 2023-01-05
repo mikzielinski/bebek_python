@@ -75,6 +75,7 @@ class bebek_team_picker_menu():
     def Check_for_existing_teams():
         global teams_list
         global teams_dict
+        teams_list=[]
         for file in os.listdir("Bebek/Teams_"):
             if file.endswith(".json"):
                 team_name = file.split(".")[0]
@@ -133,6 +134,8 @@ class bebek_team_picker_menu():
         global player_list
         global dict_of_teams
         list_of_players=[]
+        player_list =[]
+        list_Box.delete(0,"end")
         Json_chars_data = bebek_team_picker_menu.Read_char_bank()
         picked_team = Combobox_teamPick.get()
         #Get list of players for picked team
@@ -165,10 +168,10 @@ class bebek_team_picker_menu():
                 break
         bebek_team_picker_menu.Update_players(txt_box_class,txt_box_cost,txt_box_type,txt_box_health,txt_box_move,txt_box_armor,txt_box_throw,txt_box_text,txt_box_dext)
     def Update_team(Team_budget_filed):
-        print(team_budget)
-        #Team_budget_filed.configure(state=tk.NORMAL)
-        #Team_budget_filed.delete(0,"end")
-        #Team_budget_filed.pack()
+        Team_budget_filed.configure(state=tk.NORMAL)
+        Team_budget_filed.delete(0,"end")
+        Team_budget_filed.insert(0,team_budget)
+        Team_budget_filed.pack()
 
     def Update_players(txt_box_class,txt_box_cost,txt_box_type,txt_box_health,txt_box_move,txt_box_armor,txt_box_throw,txt_box_text,txt_box_dext):
         txt_box_class.configure(state=tk.NORMAL)
@@ -331,16 +334,7 @@ class bebek_team_picker_menu():
         #team fileds
         ##team budget
         label_team_budget = tk.Label(top_mid_left_frame, text="Team budget:", bg="gray").pack(fill=tk.X,padx=5,pady=5, side="left")
-        txt_box_teamBudget = tk.Entry(top_mid_left_frame,bg="gray").pack(fill=tk.X,padx=5,pady=5, side="left")
-        try:
-            tm_budget = team_budget
-        except:
-            tm_budget = ""
-        #txt_box_teamBudget.insert(0,tm_budget)
-        #txt_box_teamBudget.configure(state=tk.DISABLED)
-        #txt_box_teamBudget.pack()
-        
-        
+        txt_box_teamBudget = tk.Entry(top_mid_left_frame,bg="gray")
         
         
         
@@ -360,7 +354,13 @@ class bebek_team_picker_menu():
         players_listbox.bind('<<ListboxSelect>>',lambda x:bebek_team_picker_menu.GetPlayerDetails(players_listbox,txt_box_class,txt_box_cost,txt_box_type,txt_box_health,txt_box_move,txt_box_armor,txt_box_throw,txt_box_text,txt_box_dext))
         players_listbox.pack(fill=tk.BOTH,expand=True)
         
-        
+        try:
+            tm_budget = str(team_budget)
+            txt_box_teamBudget.pack(fill=tk.X,padx=5,pady=5, side="right")
+        except:
+            tm_budget = ""
+            txt_box_teamBudget.insert(0,tm_budget)
+            txt_box_teamBudget.pack(fill=tk.X,padx=5,pady=5, side="left")        
         
         #player_chart
 
@@ -453,7 +453,7 @@ class bebek_team_picker_menu():
         
         #label_char_img = tk.Label(right_frame, text="Miniature", bg="gray").pack()
         
-        button_recruit_player =  tk.Button(right_frame, text="Sign contract", command= lambda: [TeamSquad.recruit_player(combo_pick_player_team)])
+        button_recruit_player =  tk.Button(right_frame, text="Sign contract", command= lambda: [TeamSquad.recruit_player(combo_pick_player_team,txt_box_teamBudget)])
         button_recruit_player.pack(fill=tk.BOTH,expand=True)
         ###test button
         #chart_frame = tk.Frame(Window,  width=1000,  height=400,  bg='grey')
@@ -514,7 +514,7 @@ class TeamSquad(object):
         with open("Bebek/Teams_/"+json_team_file,"r") as file:
             str_json = file.read().rstrip()
         json_chars = json.loads(str_json)
-        if team_budget > 0:
+        if json_chars['TeamBudget'] > 0:
             team_budget = json_chars['TeamBudget']
 
         return json_chars
@@ -538,7 +538,7 @@ class TeamSquad(object):
         player_def_json["body"] = playable_char_obj.body
         return player_def_json
     
-    def recruit_player(Teams_combobox):
+    def recruit_player(Teams_combobox,txt_box_teamBudget):
         global picked_char
         global teams_dict
         json_team_data = TeamSquad.read_team(Teams_combobox)
@@ -553,9 +553,12 @@ class TeamSquad(object):
             
             with open("Bebek/Teams_/"+team_name,"w") as outputfile:
                 json.dump(json_team_data,outputfile)
+            bebek_team_picker_menu.Update_team(txt_box_teamBudget)
         else:
             messagebox.showwarning(title= "Recrutaion status", message="You dont have enough money to sign contract with this player")
         
+    def sell_player(Teams_combobox,txt_box_teamBudget):
+        print("to design after team manager window ready")
         
 
         
