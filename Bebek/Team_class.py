@@ -16,14 +16,19 @@ from matplotlib.backends.backend_tkagg import (
 # Implement the default Matplotlib key bindings.
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
+from Tools_class import bebek_tools
 
 player_list = []
 picked_char = ""
+picked_position=""
 player_chart = ""
 teams_list = []
 teams_dict = dict()
 selected_team=""
 team_budget=""
+main_path = os.path.dirname(__file__)
+btn_dict_board=dict()
+char_dict_pic=dict()
 
 class Playable_char(object):
     #Class for player definition
@@ -46,6 +51,7 @@ class Playable_char(object):
 class bebek_character(object):
     
     def orc_runner():
+        global main_path
         character_prop = dict()
         character_prop['type'] = 'orc'
         character_prop['health'] = 2
@@ -54,11 +60,13 @@ class bebek_character(object):
         character_prop['throw'] = 5
         character_prop['text'] = 'OR'
         character_prop['team'] = ''
-        img_pic = Image.open(r'D:\Programming\kurs\projekty\bebek\Bebek\char_pic\orc.png')
+        img_pic_path = os.path.join(main_path,'/Users/GNYAA/source/repos/bebek_python/Bebek/char_pic/orc.png')
+        img_pic = Image.open(img_pic_path)
         character_prop['pic'] = ImageTk.PhotoImage(img_pic)
         return character_prop
     
     def dwarf_elder():
+        global main_path
         character_prop = dict()
         character_prop['type'] = 'dwarf'
         character_prop['health'] = 1
@@ -67,7 +75,8 @@ class bebek_character(object):
         character_prop['throw'] = 3
         character_prop['text'] = 'DE'
         character_prop['team'] = ''
-        img_pic= Image.open(r'D:\Programming\kurs\projekty\bebek\Bebek\char_pic\dwarf.png')
+        img_pic_path = os.path.join(main_path,'/Users/GNYAA/source/repos/bebek_python/Bebek/char_pic/dwarf.png')
+        img_pic= Image.open(img_pic_path)
         character_prop['pic'] = ImageTk.PhotoImage(img_pic)
         return character_prop
     
@@ -76,7 +85,8 @@ class bebek_team_picker_menu():
         global teams_list
         global teams_dict
         teams_list=[]
-        for file in os.listdir("Bebek/Teams_"):
+        team_folder_path = os.path.join(main_path,'/Users/GNYAA/source/repos/bebek_python/Bebek/Teams_')
+        for file in os.listdir(team_folder_path):
             if file.endswith(".json"):
                 team_name = file.split(".")[0]
                 teams_dict[team_name]=file
@@ -122,7 +132,8 @@ class bebek_team_picker_menu():
         player_chart = fig
         
     def Read_char_bank():
-        with open("Bebek\char_pack.json","r") as file:
+        json_path = os.path.join(main_path,'/Users/GNYAA/source/repos/bebek_python/Bebek/char_pack.json')
+        with open(json_path,"r") as file:
             str_json = file.read().rstrip()
         json_chars = json.loads(str_json)
         chars_data_json = json_chars['Players_char']
@@ -154,7 +165,28 @@ class bebek_team_picker_menu():
             p_class = p.cl
             list_Box.insert(idx,p_class )
         list_Box.pack()
-        
+
+    def GetPlayerDetails_listOnly(listbox_players):
+        global player_list
+        global picked_char
+        char_picked = picked_char
+        player_class = listbox_players.get(listbox_players.curselection())
+        list_of_players = player_list
+        for pl_cl in list_of_players:
+            picked_class=pl_cl.cl
+            if picked_class == player_class:
+                picked_char = pl_cl
+                break
+
+    def GetPlayerDetails_byName(character_name):
+        global player_list
+        global picked_char
+        for pl_cl in player_list:
+            picked_class=pl_cl.cl
+            if picked_class == character_name:
+                picked_char = pl_cl
+                break
+
     def GetPlayerDetails(listbox_players,txt_box_class,txt_box_cost,txt_box_type,txt_box_health,txt_box_move,txt_box_armor,txt_box_throw,txt_box_text,txt_box_dext):
         global player_list
         global picked_char
@@ -511,7 +543,8 @@ class TeamSquad(object):
         team_budget = 0
         picked_team_name = Combobox_teamPick.get()
         json_team_file = teams_dict[picked_team_name]
-        with open("Bebek/Teams_/"+json_team_file,"r") as file:
+        team_json_main = os.path.join(main_path,'/Users/GNYAA/source/repos/bebek_python/Bebek/Teams_/')
+        with open(team_json_main+json_team_file,"r") as file:
             str_json = file.read().rstrip()
         json_chars = json.loads(str_json)
         if json_chars['TeamBudget'] > 0:
@@ -560,7 +593,15 @@ class TeamSquad(object):
     def sell_player(Teams_combobox,txt_box_teamBudget):
         print("to design after team manager window ready")
         
+    def spawn_character(btn_dict,spawn_position):
+        global picked_char
+        if spawn_position =="":
+            messagebox.showwarning(title="No position to spawn",message ="Please pick spawn position")
+        else:
+            spawn_position =picked_position
+            bebek_tools.spawn_char_onB(btn_dict_board, char_dict_pic)
 
+        
         
    
         

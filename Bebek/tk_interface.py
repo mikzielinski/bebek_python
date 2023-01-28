@@ -8,6 +8,7 @@ import Tools_class
 import Team_class
 char_dict_pics=dict()
 
+
 def Temp_method_get_char_pics():
     global char_dict_pics
     return char_dict_pics
@@ -16,6 +17,7 @@ def draw_pitch(pitch_config_dict,cell_definition,Master_frame,position_dict,char
     #root = Tk()
     #root.title =('Bebek Project GUI')
     #root.geometry("1920x1020")
+
     position_dict = dict()
     global char_dict_pics
     #wideget code here - main board grid

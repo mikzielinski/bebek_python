@@ -11,14 +11,17 @@ from xml.dom import xmlbuilder
 #from tkinter import Event
 #from turtle import bgcolor, color
 from Player_class import Player
+from Team_class import TeamSquad,bebek_team_picker_menu
 from tkinter import *
+from tkinter import *
+from tkinter import BROWSE, LEFT, Canvas, Message, ttk
 from multiprocessing import Process
 
 
 
 
 #Global vars
-
+teams_list =[]
 
 class bebek_tools():
     #Classes related to game mechanics such as dice rolling, moving, checking if move was legal etc.
@@ -26,8 +29,11 @@ class bebek_tools():
         seleted_Cell =""
         btn_name =""
         saveWord = "dupa"
+        spawn_loc =""
         picked_position = ""
         global_var =""
+        teams_list =[]
+        teams_dict =dict()
         
 
         def btn_wait4press(button_obj_arr,btn_check_str):
@@ -41,7 +47,9 @@ class bebek_tools():
             return new_num
         def SavePosition(Position_key):
             global btn_name
+            global spawn_loc
             btn_name = Position_key.btn_position
+            spawn_loc= Position_key.btn_position
             return btn_name       
         def roll_dice(diceType,number_of_dices):
             roll_result=[]
@@ -252,7 +260,9 @@ class bebek_tools():
         def RewriteCell_Position():
             global btn_name
             global picked_position
+            global spawn_loc
             picked_position = btn_name
+            spawn_loc = btn_name
             btn_name = ""
         def Clone_char_btn2btn(orgin_position_btn,new_position_btn,btn_pic_dict):
             #null img for remove
@@ -333,9 +343,67 @@ class bebek_tools():
             else:
                 messagebox.showwarning(title='Illegal move', message='Please pick only highlithed filed')
         
+        def Char_spawn_wnd(pics_btn_dict,char_dict_pics,picked_position):
+            List_of_teams = []
+            Json_char_bank=bebek_team_picker_menu.Read_char_bank()
+            for team in Json_char_bank:
+                List_of_teams.append(team['Team'])
+            bebek_team_picker_menu.Check_for_existing_teams()
+            spawn_wnd = tkinter.Toplevel()
+            spawn_wnd.minsize(width=400, height=400)
+            spawn_wnd.title("Dev console - spawn character")
+            pop_frame = tkinter.Frame(spawn_wnd, width = 400, height = 400)
+            pop_frame.pack(fill='both',  padx=10,  pady=5,  expand=True)
+            label_team = tkinter.Label(pop_frame,text="Pick team")
+            label_team.pack()
+            combo_team = ttk.Combobox(pop_frame)
+            combo_team['values']=List_of_teams
+            combo_team['state'] ='readonly'
+            combo_team.bind("<<ComboboxSelected>>",lambda x=1: [bebek_team_picker_menu.GetPlayers(combo_team,list_pick_char)])
+            combo_team.pack(fill='both',  padx=10,  pady=5,  expand=True)
+
+            label_char = tkinter.Label(pop_frame,text="Pick character to spawn")
+            label_char.pack()
+            list_pick_char = tkinter.Listbox(pop_frame, selectmode=BROWSE)
+            list_pick_char.bind('<<ListboxSelect>>',lambda x:bebek_team_picker_menu.GetPlayerDetails_listOnly(list_pick_char))
+            list_pick_char.pack(fill='both',  padx=10,  pady=5,  expand=True)
+            label_position = tkinter.Label(pop_frame,text="Enter coordinates(like: y:x)")
+            label_position.pack(fill='both',  padx=10,  pady=5,  expand=True)
+            textbox_coord = tkinter.Entry(pop_frame)
+            textbox_coord.pack(fill='both',  padx=10,  pady=5,  expand=True)
+            btn_spawn = tkinter.Button(pop_frame,text="Spawn", command= lambda: TeamSquad.spawn_character(pics_btn_dict,spawn_loc))
+            btn_spawn.pack(side='left', fill='both',  padx=10,  pady=5,  expand=True)
+            btn_spawn_exit = tkinter.Button(pop_frame,text="Exit",command=spawn_wnd.destroy)
+            btn_spawn_exit.pack(side='right', fill='both',  padx=10,  pady=5,  expand=True)
                 
         
-        
+        def spawn_char_onB(btn_dict_board, char_dict_pic):
+            global spawn_loc
+            global selected_Char
+            X,Y = spawn_loc[0], spawn_loc[1]
+            #Find Button to update
+            var = tkinter.IntVar()
+            dictKey = str(X)+":"+str(Y)
+            btn = btn_dict_board[dictKey]
+            btn_str = str(btn)
+            btn_num = [int(i) for i in btn_str if i.isdigit()]
+            btn_str = int("".join(map(str,btn_num)))
+            btn_tag_press = '<ButtonPress-'+str(btn_str)+'>'
+            btn_tag_release = '<ButtonRelease-'+str(btn_str)+'>'
+            #Set character vars
+            btn.char_type = selected_Char.type
+            btn.char_health = selected_Char.health
+            btn.char_move = selected_Char.move
+            btn.char_armor = selected_Char.armor
+            btn.char_throw = selected_Char.throw
+            btn.char_team = selected_Char['team']
+            btn.char_ball = False
+            btn.cell_taken = True
+            image_char = selected_Char.pitch_pic
+            btn.img = image_char
+            char_dict_pic[btn] = btn.img
+            btn.selected_char =btn.configure(text =selected_Char.type, image=btn.img,compound='center')
+            return btn       
             
                  
             
